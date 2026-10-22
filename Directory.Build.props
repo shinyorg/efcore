@@ -1,0 +1,42 @@
+<Project>
+    <PropertyGroup>
+        <BaseTargetFramework>net10.0</BaseTargetFramework>
+        <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Authors>aritchie;ShinyLib</Authors>
+
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Copyright>Copyright (c) $([System.DateTime]::Now.Year) Allan Ritchie</Copyright>
+        <RepositoryUrl>https://github.com/shinyorg/EntityFrameworkCore</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageReadmeFile>readme.md</PackageReadmeFile>
+        <PackageReleaseNotes>https://shinylib.net/efcore/release-notes</PackageReleaseNotes>
+        <PackageProjectUrl>https://shinylib.net/efcore</PackageProjectUrl>
+        <PackageTags>efcore entityframeworkcore entity-framework shiny</PackageTags>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+        <IncludeSource>True</IncludeSource>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <PublishRepositoryUrl>True</PublishRepositoryUrl>
+        <EmbedUntrackedSources>True</EmbedUntrackedSources>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="$(MSBuildThisFileDirectory)nuget.png" Pack="true" PackagePath="icon.png"/>
+        <None Include="$(MSBuildThisFileDirectory)nuget.txt" Pack="true" PackagePath="readme.txt"/>
+        <None Include="$(MSBuildThisFileDirectory)readme.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Nerdbank.GitVersioning">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+</Project>

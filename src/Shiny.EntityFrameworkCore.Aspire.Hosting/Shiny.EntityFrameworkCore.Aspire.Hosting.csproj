@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>$(BaseTargetFramework)</TargetFramework>
+        <Description>Aspire AppHost seed gate for EF Core databases - seed on first-time setup or on destructive recreation, with the marker kept in the database itself.</Description>
+        <PackageTags>$(PackageTags) aspire apphost hosting seeding</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Shiny.EntityFrameworkCore.Aspire.Hosting.Tests"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <!--
+          No Npgsql/SqlClient/MySql driver references: the gate reaches its marker through the DbContext the AppHost
+          builds with the user's own EF provider, via the Seeding package's history table.
+        -->
+        <PackageReference Include="Aspire.Hosting"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Shiny.EntityFrameworkCore.Seeding\Shiny.EntityFrameworkCore.Seeding.csproj"/>
+    </ItemGroup>
+</Project>

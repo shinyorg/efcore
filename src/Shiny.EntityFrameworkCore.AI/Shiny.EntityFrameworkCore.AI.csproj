@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>$(BaseTargetFramework)</TargetFramework>
+        <Description>Microsoft.Extensions.AI tools over an EF Core DbContext with non-removable per-entity scopes, so an LLM only ever sees the rows it is allowed to.</Description>
+        <PackageTags>$(PackageTags) ai mcp aifunction llm tools</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Shiny.EntityFrameworkCore.Mcp"/>
+        <InternalsVisibleTo Include="Shiny.EntityFrameworkCore.AI.Tests"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore"/>
+        <PackageReference Include="Microsoft.Extensions.AI.Abstractions"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
+    </ItemGroup>
+</Project>

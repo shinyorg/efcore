@@ -1,0 +1,131 @@
+name: Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+  push:
+    branches:
+    - v*
+    paths-ignore:
+      - '.claude-plugins/**'
+      - 'skills/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Nerdbank.GitVersioning appends Git*Version lines to $GITHUB_ENV once per project. With parallel
+# MSBuild (-m) the worker processes race on that file and tear lines, which the runner then rejects
+# with "Invalid format '1.0.0'" at the end of the step. Nothing here consumes those variables.
+#
+# PublicRelease applies to every step, not just Build: the Test step rebuilds the src projects, and
+# GeneratePackageOnBuild would otherwise emit a second, non-public (1.x.y-g<commit>) .nupkg next to the
+# real one, which the push glob then publishes too.
+env:
+  NBGV_SetCloudBuildVersionVars: false
+  PublicRelease: true
+
+jobs:
+  # The full suite runs here, not on the macOS packing job: PostgreSQL, SQL Server and MySQL come up through
+  # Testcontainers, and GitHub's macOS runners have no Docker. Linux does, and sqlite-vec ships a linux-x64
+  # loadable library for the SQLite vector tests.
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v7
+      with:
+          fetch-depth: 0   # nbgv computes {height} from full history
+
+    - name: Setup .NET 10.0
+      uses: actions/setup-dotnet@v6
+      with:
+          dotnet-version: '10.0.x'
+
+    # Desktop natives only — the iOS xcframework needs Xcode and the Android .so the NDK, neither of which
+    # this job packs, so --skip-missing downgrades those two to warnings here.
+    - name: Fetch sqlite-vec native binaries (desktop)
+      run: bash build/build-sqlite-vec.sh --skip-missing
+
+    # xunit v3 runs on Microsoft.Testing.Platform, so trx comes from --report-trx (the VSTest
+    # "--logger trx" spelling is silently ignored here). TestingPlatformShowTestsFailure surfaces the
+    # failing test name, assertion and stack as MSBuild errors; without it the run reports only a count
+    # and points at a log file that lives on the runner, which makes a CI-only failure impossible to
+    # diagnose from the logs alone.
+    - name: Test
+      run: dotnet test EntityFrameworkCore.slnx --configuration Release -p:TestingPlatformShowTestsFailure=true -p:TestingPlatformCaptureOutput=false -- --report-trx
+
+    # always(): the point of these is the run where the Test step failed.
+    - name: Post Test Results
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v7
+      with:
+        name: test-results
+        path: |
+          tests/**/TestResults/*.trx
+          tests/**/TestResults/*.log
+        retention-days: 5
+        if-no-files-found: warn
+
+  build:
+    needs: test
+
+    permissions:
+      id-token: write   # required for NuGet trusted publishing (OIDC)
+      contents: read
+
+    # macOS because the packed Sqlite.Mobile package carries the iOS sqlite-vec xcframework (needs Xcode).
+    runs-on: macos-26
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v7
+      with:
+          fetch-depth: 0   # nbgv computes {height} from full history
+
+    - name: Setup .NET 10.0
+      uses: actions/setup-dotnet@v6
+      with:
+          dotnet-version: '10.0.x'
+
+    # The Android sqlite-vec .so are compiled from source (see build/build-sqlite-vec.sh) so they get
+    # 16 KB page alignment; that needs the NDK. Its toolchain is darwin-x86_64 only, so an arm64
+    # runner runs it through Rosetta.
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v4
+
+    - name: Setup Android NDK
+      run: |
+        sdkmanager --install "ndk;28.2.13676358"
+        echo "ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/28.2.13676358" >> "$GITHUB_ENV"
+        sudo softwareupdate --install-rosetta --agree-to-license || true
+
+    # No --skip-missing: a pack must never ship an incomplete set of natives.
+    - name: Fetch sqlite-vec native binaries
+      run: bash build/build-sqlite-vec.sh
+
+    - name: Build
+      run: dotnet build build.slnf /restore -m -property:Configuration=Release
+
+    - name: Post NuGet Artifacts
+      uses: actions/upload-artifact@v7
+      with:
+        name: nuget-artifacts
+        path: '**/*.nupkg'
+        retention-days: 5
+
+    - name: NuGet Login (OIDC)
+      id: nuget-login
+      if: ${{ github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/v') }}
+      uses: NuGet/login@v1
+      with:
+        user: aritchie
+
+    - name: Publish NuGets
+      if: ${{ github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/v') }}
+      run: dotnet nuget push "**/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key ${{ steps.nuget-login.outputs.NUGET_API_KEY }} --skip-duplicate

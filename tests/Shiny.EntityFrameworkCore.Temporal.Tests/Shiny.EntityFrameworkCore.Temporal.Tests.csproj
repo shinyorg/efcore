@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <!-- EF's analyzer flags every ".Internal" namespace, including this package's own internals the tests reach via InternalsVisibleTo. -->
+        <NoWarn>$(NoWarn);EF1001</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Shiny.EntityFrameworkCore.Temporal\Shiny.EntityFrameworkCore.Temporal.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- MySql.EntityFrameworkCore needs EF 10.0.12; raised here rather than lifting the library floor. -->
+        <PackageReference Include="Microsoft.EntityFrameworkCore" VersionOverride="10.0.12"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" VersionOverride="10.0.12"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" VersionOverride="10.0.12"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" VersionOverride="10.0.12"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" VersionOverride="10.0.12"/>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"/>
+        <PackageReference Include="MySql.EntityFrameworkCore"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" VersionOverride="10.0.12"/>
+        <PackageReference Include="Testcontainers.PostgreSql"/>
+        <PackageReference Include="Testcontainers.MsSql"/>
+        <PackageReference Include="Testcontainers.MySql"/>
+    </ItemGroup>
+</Project>

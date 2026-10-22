@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <!--
+      The AppHost SDK brings DCP (Aspire's orchestrator) for this machine's RID, so the end-to-end test can start a
+      real DistributedApplication with a Postgres container. Library references are not AppHost resources.
+    -->
+    <Sdk Name="Aspire.AppHost.Sdk" Version="13.5.0"/>
+
+    <PropertyGroup>
+        <!-- The CLI bundle only matters for `aspire run`; tests drive DCP directly. -->
+        <NoWarn>$(NoWarn);ASPIRE010</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- MySql.EntityFrameworkCore 10.0.12 needs EF 10.0.12; Aspire.Hosting 13.5 needs Microsoft.Extensions >= 10.0.11.
+             Raise them here rather than the library floor. -->
+        <PackageReference Include="Microsoft.EntityFrameworkCore" VersionOverride="10.0.12"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" VersionOverride="10.0.12"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" VersionOverride="10.0.12"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" VersionOverride="10.0.12"/>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"/>
+        <PackageReference Include="MySql.EntityFrameworkCore"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting" VersionOverride="10.0.12"/>
+        <PackageReference Include="Aspire.Hosting.AppHost"/>
+        <PackageReference Include="Aspire.Hosting.PostgreSQL"/>
+        <PackageReference Include="Aspire.Hosting.SqlServer"/>
+        <PackageReference Include="Aspire.Hosting.MySql"/>
+        <PackageReference Include="Aspire.Hosting.Testing"/>
+        <PackageReference Include="Testcontainers.PostgreSql"/>
+        <PackageReference Include="Testcontainers.MsSql"/>
+        <PackageReference Include="Testcontainers.MySql"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Shiny.EntityFrameworkCore.Aspire.Hosting\Shiny.EntityFrameworkCore.Aspire.Hosting.csproj" IsAspireProjectResource="false"/>
+    </ItemGroup>
+</Project>

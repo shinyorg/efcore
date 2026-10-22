@@ -1,0 +1,14 @@
+{
+    "solution": {
+        "path": "EntityFrameworkCore.slnx",
+        "projects": [
+            "src\\Shiny.EntityFrameworkCore.Sqlite.Mobile\\Shiny.EntityFrameworkCore.Sqlite.Mobile.csproj",
+            "src\\Shiny.EntityFrameworkCore.Outbox\\Shiny.EntityFrameworkCore.Outbox.csproj",
+            "src\\Shiny.EntityFrameworkCore.Temporal\\Shiny.EntityFrameworkCore.Temporal.csproj",
+            "src\\Shiny.EntityFrameworkCore.AI\\Shiny.EntityFrameworkCore.AI.csproj",
+            "src\\Shiny.EntityFrameworkCore.Mcp\\Shiny.EntityFrameworkCore.Mcp.csproj",
+            "src\\Shiny.EntityFrameworkCore.Seeding\\Shiny.EntityFrameworkCore.Seeding.csproj",
+            "src\\Shiny.EntityFrameworkCore.Aspire.Hosting\\Shiny.EntityFrameworkCore.Aspire.Hosting.csproj"
+        ]
+    }
+}

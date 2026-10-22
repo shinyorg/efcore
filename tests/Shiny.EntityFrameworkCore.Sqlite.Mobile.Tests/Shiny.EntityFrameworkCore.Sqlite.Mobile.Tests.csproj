@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <!-- The scaffolding test uses SqliteDesignTimeServices, which EF marks internal. -->
+        <NoWarn>$(NoWarn);EF1001</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- The e_sqlite3 bundle (FTS5 + R*Tree compiled in). -->
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite"/>
+        <!-- Only to prove the scaffolded migration code carries the sidecar annotations. -->
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" PrivateAssets="all"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Shiny.EntityFrameworkCore.Sqlite.Mobile\Shiny.EntityFrameworkCore.Sqlite.Mobile.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- sqlite-vec loadable for the vector tests. The osx-arm64 build is committed (mirrors Shiny.DocumentDb);
+             other dev boxes / CI use the copy the library project fetched into its native/ folder. -->
+        <None Include="runtimes\osx-arm64\native\vec0.dylib"
+              Condition="'$(NETCoreSdkRuntimeIdentifier)' == 'osx-arm64'"
+              Link="vec0.dylib"
+              CopyToOutputDirectory="PreserveNewest"/>
+        <None Include="..\..\src\Shiny.EntityFrameworkCore.Sqlite.Mobile\native\runtimes\$(NETCoreSdkRuntimeIdentifier)\native\vec0.*"
+              Condition="'$(NETCoreSdkRuntimeIdentifier)' != 'osx-arm64'"
+              Link="%(Filename)%(Extension)"
+              CopyToOutputDirectory="PreserveNewest"/>
+    </ItemGroup>
+</Project>

@@ -1,0 +1,67 @@
+<Project>
+    <PropertyGroup>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+        <EfCoreVersion>10.0.7</EfCoreVersion>
+        <AspireVersion>13.5.0</AspireVersion>
+        <MicrosoftExtensionsVersion>10.0.7</MicrosoftExtensionsVersion>
+        <TestcontainersVersion>4.13.0</TestcontainersVersion>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageVersion Include="Nerdbank.GitVersioning" Version="3.10.91"/>
+
+        <!-- EF Core -->
+        <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="$(EfCoreVersion)"/>
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="$(EfCoreVersion)"/>
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="$(EfCoreVersion)"/>
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="$(EfCoreVersion)"/>
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="$(EfCoreVersion)"/>
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="$(EfCoreVersion)"/>
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="$(EfCoreVersion)"/>
+        <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3"/>
+        <!-- Pomelo has no EF 10 build; Oracle's provider does, but it needs EF 10.0.12, so test projects that use it
+             raise the EF packages with VersionOverride rather than lifting the library floor. -->
+        <PackageVersion Include="MySql.EntityFrameworkCore" Version="10.0.12"/>
+        <PackageVersion Include="Microsoft.Data.Sqlite" Version="10.0.7"/>
+        <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="10.0.7"/>
+        <PackageVersion Include="NetTopologySuite" Version="2.6.0"/>
+        <PackageVersion Include="NetTopologySuite.IO.GeoJSON4STJ" Version="4.0.0"/>
+
+        <!-- Microsoft.Extensions -->
+        <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="$(MicrosoftExtensionsVersion)"/>
+        <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(MicrosoftExtensionsVersion)"/>
+        <PackageVersion Include="Microsoft.Extensions.Hosting" Version="$(MicrosoftExtensionsVersion)"/>
+        <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="$(MicrosoftExtensionsVersion)"/>
+        <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="$(MicrosoftExtensionsVersion)"/>
+        <PackageVersion Include="Microsoft.Extensions.Logging" Version="$(MicrosoftExtensionsVersion)"/>
+        <PackageVersion Include="Microsoft.Extensions.AI" Version="10.8.1"/>
+        <PackageVersion Include="Microsoft.Extensions.AI.Abstractions" Version="10.8.1"/>
+
+        <!-- MCP -->
+        <PackageVersion Include="ModelContextProtocol" Version="2.0.0"/>
+        <PackageVersion Include="ModelContextProtocol.AspNetCore" Version="2.0.0"/>
+        <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="10.0.7"/>
+
+        <!-- Aspire -->
+        <PackageVersion Include="Aspire.Hosting" Version="$(AspireVersion)"/>
+        <PackageVersion Include="Aspire.Hosting.AppHost" Version="$(AspireVersion)"/>
+        <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="$(AspireVersion)"/>
+        <PackageVersion Include="Aspire.Hosting.SqlServer" Version="$(AspireVersion)"/>
+        <PackageVersion Include="Aspire.Hosting.MySql" Version="$(AspireVersion)"/>
+        <PackageVersion Include="Aspire.Hosting.Testing" Version="$(AspireVersion)"/>
+    </ItemGroup>
+    <ItemGroup>
+        <!-- Test-only -->
+        <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.8.1"/>
+        <PackageVersion Include="xunit.v3" Version="3.2.2"/>
+        <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5"/>
+        <!-- Keep in lockstep with the Microsoft.Testing.Platform version xunit.v3 resolves (1.9.1).
+             This is the package that decides it: everything else in the platform arrives
+             transitively at xunit's version, and a trx writer from a newer line drags the platform
+             assembly up with it while xunit's adapter stays compiled against the old one. The
+             result is a MissingMethodException on the first line of output, before any test runs. -->
+        <PackageVersion Include="Microsoft.Testing.Extensions.TrxReport" Version="1.9.1"/>
+        <PackageVersion Include="Testcontainers.MsSql" Version="$(TestcontainersVersion)"/>
+        <PackageVersion Include="Testcontainers.MySql" Version="$(TestcontainersVersion)"/>
+        <PackageVersion Include="Testcontainers.PostgreSql" Version="$(TestcontainersVersion)"/>
+    </ItemGroup>
+</Project>

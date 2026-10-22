@@ -1,0 +1,23 @@
+<Project>
+    <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))"/>
+
+    <PropertyGroup>
+        <TargetFramework>$(BaseTargetFramework)</TargetFramework>
+        <OutputType>Exe</OutputType>
+        <IsPackable>false</IsPackable>
+        <IsTestProject>true</IsTestProject>
+        <NoWarn>$(NoWarn);xUnit1051</NoWarn>
+
+        <!-- xunit v3 runs on Microsoft.Testing.Platform: the test assembly is its own runner, so
+             `dotnet test` and running the executable directly do exactly the same thing. Runner
+             options (such as report-trx) go after the double-dash separator. -->
+        <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+        <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="xunit.v3"/>
+        <!-- MTP has no built-in trx writer; the report-trx option CI passes comes from this extension. -->
+        <PackageReference Include="Microsoft.Testing.Extensions.TrxReport"/>
+    </ItemGroup>
+</Project>

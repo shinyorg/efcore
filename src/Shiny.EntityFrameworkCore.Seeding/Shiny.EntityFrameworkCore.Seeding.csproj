@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>$(BaseTargetFramework)</TargetFramework>
+        <Description>Versioned, run-once data seeding for EF Core - seeders run at startup only when new or their version is bumped.</Description>
+        <PackageTags>$(PackageTags) seeding seed data migrations</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Shiny.EntityFrameworkCore.Seeding.Tests"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions"/>
+    </ItemGroup>
+</Project>

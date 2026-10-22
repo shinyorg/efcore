@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Shiny.EntityFrameworkCore.Mcp\Shiny.EntityFrameworkCore.Mcp.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite"/>
+        <PackageReference Include="Microsoft.AspNetCore.TestHost"/>
+        <PackageReference Include="ModelContextProtocol.AspNetCore"/>
+    </ItemGroup>
+</Project>

@@ -1,0 +1,11 @@
+<Project>
+    <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))"/>
+
+    <PropertyGroup>
+        <!--
+          EF Core itself is not trim/AOT-safe (it annotates RequiresDynamicCode across its query pipeline), so
+          these packages do not claim IsAotCompatible. Our own code still avoids gratuitous reflection.
+        -->
+        <IsPackable>true</IsPackable>
+    </PropertyGroup>
+</Project>

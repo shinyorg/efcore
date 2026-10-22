@@ -1,0 +1,71 @@
+name: Bug Report
+description: You have found something wrong with Shiny EF Core Extensions
+title: "[Bug]: "
+labels: [bug, unverified]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for filing an issue.  Please only file issues against the LATEST STABLE or LATEST BETA version of Shiny EF Core Extensions from Nuget (ALPHAs are not accepted for issues).
+        If you have questions, please post them in GitHub discussions.
+        Documentation is at https://shinylib.net/efcore
+  - type: dropdown
+    id: package
+    attributes:
+      label: Package
+      description: The package you are filing against.  If it is not listed here it means there is no support for it.
+      options:
+        - SQLite Mobile (Shiny.EntityFrameworkCore.Sqlite.Mobile)
+        - Outbox (Shiny.EntityFrameworkCore.Outbox)
+        - Temporal (Shiny.EntityFrameworkCore.Temporal)
+        - AI Tools (Shiny.EntityFrameworkCore.AI)
+        - MCP (Shiny.EntityFrameworkCore.Mcp)
+        - Seeding (Shiny.EntityFrameworkCore.Seeding)
+        - Aspire Hosting (Shiny.EntityFrameworkCore.Aspire.Hosting)
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Shiny EF Core Extensions Version
+      description: The version of the Nuget package you are filing against.
+    validations:
+      required: true
+  - type: input
+    id: dotnet
+    attributes:
+      label: .NET / EF Core Provider
+      description: e.g. net10.0-ios + Microsoft.EntityFrameworkCore.Sqlite 10.0.7, net10.0 + Npgsql.EntityFrameworkCore.PostgreSQL 10.0.3
+    validations:
+      required: true
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Steps To Reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+        1.
+        2.
+        3.
+  - type: textarea
+    attributes:
+      label: Expected Behavior
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Actual Behavior
+    validations:
+      required: true
+  - type: textarea
+    id: exception
+    attributes:
+      label: Exception or Log output
+      description: Please copy and paste any relevant log output.
+  - type: textarea
+    id: codesample
+    attributes:
+      label: Code Sample
+      description: Please include a github repo with your reproducible sample.

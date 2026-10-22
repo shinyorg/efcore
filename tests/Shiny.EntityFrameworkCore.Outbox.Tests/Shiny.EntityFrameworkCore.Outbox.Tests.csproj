@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Shiny.EntityFrameworkCore.Outbox\Shiny.EntityFrameworkCore.Outbox.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- MySql.EntityFrameworkCore needs EF 10.0.12; raised here rather than lifting the library floor. -->
+        <PackageReference Include="Microsoft.EntityFrameworkCore" VersionOverride="10.0.12"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" VersionOverride="10.0.12"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" VersionOverride="10.0.12"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" VersionOverride="10.0.12"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" VersionOverride="10.0.12"/>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"/>
+        <PackageReference Include="MySql.EntityFrameworkCore"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting"/>
+        <PackageReference Include="Testcontainers.PostgreSql"/>
+        <PackageReference Include="Testcontainers.MsSql"/>
+        <PackageReference Include="Testcontainers.MySql"/>
+    </ItemGroup>
+</Project>

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>$(BaseTargetFramework)</TargetFramework>
+        <Description>Expose an EF Core DbContext as a Model Context Protocol server, built on Shiny.EntityFrameworkCore.AI scoped tools.</Description>
+        <PackageTags>$(PackageTags) mcp modelcontextprotocol ai agent claude</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Shiny.EntityFrameworkCore.Mcp.Tests"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Shiny.EntityFrameworkCore.AI\Shiny.EntityFrameworkCore.AI.csproj"/>
+        <!-- The server core + DI only. The transport (stdio or ASP.NET Core Streamable HTTP) is the host's choice. -->
+        <PackageReference Include="ModelContextProtocol"/>
+    </ItemGroup>
+</Project>

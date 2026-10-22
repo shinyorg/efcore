@@ -1,0 +1,31 @@
+<Solution>
+    <Folder Name="/.Solution/">
+        <File Path=".github\ISSUE_TEMPLATE\bug_report.yml" />
+        <File Path=".github\ISSUE_TEMPLATE\feature_request.yml" />
+        <File Path="CLAUDE.md" />
+        <File Path="Directory.Build.props" />
+        <File Path="Directory.Packages.props" />
+        <File Path="EntityFrameworkCore.slnx" />
+        <File Path="global.json" />
+        <File Path="LICENSE" />
+        <File Path="nuget.config" />
+        <File Path="nuget.png" />
+        <File Path="nuget.txt" />
+        <File Path="readme.md" />
+        <File Path="version.json" />
+    </Folder>
+    <Project Path="src/Shiny.EntityFrameworkCore.Sqlite.Mobile/Shiny.EntityFrameworkCore.Sqlite.Mobile.csproj" />
+    <Project Path="src/Shiny.EntityFrameworkCore.Outbox/Shiny.EntityFrameworkCore.Outbox.csproj" />
+    <Project Path="src/Shiny.EntityFrameworkCore.Temporal/Shiny.EntityFrameworkCore.Temporal.csproj" />
+    <Project Path="src/Shiny.EntityFrameworkCore.AI/Shiny.EntityFrameworkCore.AI.csproj" />
+    <Project Path="src/Shiny.EntityFrameworkCore.Mcp/Shiny.EntityFrameworkCore.Mcp.csproj" />
+    <Project Path="src/Shiny.EntityFrameworkCore.Seeding/Shiny.EntityFrameworkCore.Seeding.csproj" />
+    <Project Path="src/Shiny.EntityFrameworkCore.Aspire.Hosting/Shiny.EntityFrameworkCore.Aspire.Hosting.csproj" />
+    <Project Path="tests/Shiny.EntityFrameworkCore.Sqlite.Mobile.Tests/Shiny.EntityFrameworkCore.Sqlite.Mobile.Tests.csproj" />
+    <Project Path="tests/Shiny.EntityFrameworkCore.Outbox.Tests/Shiny.EntityFrameworkCore.Outbox.Tests.csproj" />
+    <Project Path="tests/Shiny.EntityFrameworkCore.Temporal.Tests/Shiny.EntityFrameworkCore.Temporal.Tests.csproj" />
+    <Project Path="tests/Shiny.EntityFrameworkCore.AI.Tests/Shiny.EntityFrameworkCore.AI.Tests.csproj" />
+    <Project Path="tests/Shiny.EntityFrameworkCore.Mcp.Tests/Shiny.EntityFrameworkCore.Mcp.Tests.csproj" />
+    <Project Path="tests/Shiny.EntityFrameworkCore.Seeding.Tests/Shiny.EntityFrameworkCore.Seeding.Tests.csproj" />
+    <Project Path="tests/Shiny.EntityFrameworkCore.Aspire.Hosting.Tests/Shiny.EntityFrameworkCore.Aspire.Hosting.Tests.csproj" />
+</Solution>

@@ -1,0 +1,68 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>$(BaseTargetFramework)</TargetFramework>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <Description>Spatial (R*Tree + NetTopologySuite, no mod_spatialite), sqlite-vec vector search and FTS5 full-text search for EF Core on SQLite - works on iOS, Android, Mac Catalyst and desktop.</Description>
+        <PackageTags>$(PackageTags) sqlite spatial nettopologysuite rtree sqlite-vec vector fts5 full-text ios android maui</PackageTags>
+        <!-- The sidecar migrations SQL generator and annotation providers extend EF's SQLite provider types, which
+             EF marks as "internal API" (EF1001). They are the documented extension points for provider plugins. -->
+        <NoWarn>$(NoWarn);EF1001;NU5100;NU5128</NoWarn>
+
+        <!-- The sqlite-vec native binaries are fetched at build/pack time (not committed). Bump this to upgrade;
+             build/build-sqlite-vec.sh downloads + assembles them into native/. -->
+        <SqliteVecVersion>0.1.9</SqliteVecVersion>
+        <SqliteVecNativeDir>$(MSBuildProjectDirectory)/native</SqliteVecNativeDir>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- Sqlite.Core (not Sqlite) so apps pick their own SQLitePCLRaw bundle: e_sqlite3 via
+             Microsoft.EntityFrameworkCore.Sqlite, or SQLCipher via SQLitePCLRaw.bundle_e_sqlcipher. -->
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" />
+        <PackageReference Include="NetTopologySuite" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Shiny.EntityFrameworkCore.Sqlite.Mobile.Tests" />
+    </ItemGroup>
+
+    <!-- Keep any fetched native binaries out of the default compile/content globs. -->
+    <ItemGroup>
+        <None Remove="native\**" />
+    </ItemGroup>
+
+    <!-- Auto-imported MSBuild targets (committed, not fetched). The targets file branches on
+         $(TargetPlatformIdentifier); a single net10.0 build folder is inherited by net10.0-ios / -android
+         consumers and avoids the platform-versioned TFM folders NuGet would otherwise demand. -->
+    <ItemGroup>
+        <None Include="buildTransitive\net10.0\Shiny.EntityFrameworkCore.Sqlite.Mobile.targets">
+            <Pack>true</Pack>
+            <PackagePath>buildTransitive\net10.0\Shiny.EntityFrameworkCore.Sqlite.Mobile.targets</PackagePath>
+        </None>
+    </ItemGroup>
+
+    <!-- ── Fetch sqlite-vec natives on first build (and before pack). Skipped once present. ──
+         Requires network; the iOS xcframework step requires macOS + Xcode and the Android .so are compiled with
+         the NDK (CI packs on a Mac with both). The skip-missing switch downgrades a missing toolchain to a warning
+         so a plain `dotnet build` still works without them; the CI step omits it, so a pack can never ship an
+         incomplete set of natives. -->
+    <Target Name="_FetchSqliteVecNatives"
+            BeforeTargets="BeforeBuild;_GetPackageFiles"
+            Condition="!Exists('$(SqliteVecNativeDir)/apple/sqlite_vec.xcframework/Info.plist') Or !Exists('$(SqliteVecNativeDir)/android/arm64-v8a/libsqlite_vec0.so')">
+        <Message Importance="high" Text="Fetching sqlite-vec $(SqliteVecVersion) native binaries..." />
+        <Exec Command="bash &quot;$(MSBuildProjectDirectory)/../../build/build-sqlite-vec.sh&quot; $(SqliteVecVersion) --skip-missing" />
+    </Target>
+
+    <!-- ── Contribute the fetched natives to the package (after fetch, before pack collects files). ── -->
+    <Target Name="_AddSqliteVecPackageFiles"
+            DependsOnTargets="_FetchSqliteVecNatives"
+            BeforeTargets="_GetPackageFiles">
+        <ItemGroup>
+            <None Include="$(SqliteVecNativeDir)\apple\sqlite_vec.xcframework\**\*"
+                  Pack="true" PackagePath="buildTransitive\net10.0\apple\sqlite_vec.xcframework\" />
+            <None Include="$(SqliteVecNativeDir)\android\**\*.so"
+                  Pack="true" PackagePath="buildTransitive\net10.0\android\" />
+            <None Include="$(SqliteVecNativeDir)\runtimes\**\*"
+                  Pack="true" PackagePath="runtimes" />
+        </ItemGroup>
+    </Target>
+</Project>
